@@ -1,7 +1,7 @@
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 
 -- ========================================================
--- БЛОК АВТОРА (Надпись By Hack3rN3w в правом верхнем углу)
+-- WATERMARK BLOCK (Top Right Corner)
 -- ========================================================
 local WatermarkGui = Instance.new("ScreenGui")
 WatermarkGui.Name = "EclipseWatermark"
@@ -11,7 +11,7 @@ WatermarkGui.Parent = parentTarget
 local Label = Instance.new("TextLabel")
 Label.Parent = WatermarkGui
 Label.Size = UDim2.new(0, 140, 0, 30)
-Label.Position = UDim2.new(1, -155, 0, 15) 
+Label.Position = UDim2.new(1, -155, 0, 15) -- Clean offset from the top right corner
 Label.BackgroundColor3 = Color3.fromRGB(25, 25, 25) 
 Label.BackgroundTransparency = 0.2 
 Label.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -30,26 +30,26 @@ Stroke.Parent = Label
 -- ========================================================
 
 
--- Создаем окно Eclipse Client
+-- Create Eclipse Client Main Window
 local Window = WindUI:CreateWindow({
     Title = "Eclipse Client", 
-    Subtitle = "v1.0",
+    Subtitle = "v1.2 Update", 
     Icon = "moon", 
     Size = UDim2.fromOffset(550, 380)
 })
 
 
 -- ========================================================
--- ВКЛАДКА: ГЛАВНАЯ
+-- TAB: MAIN
 -- ========================================================
 local MyTab = Window:Tab({
-    Title = "Главная",
+    Title = "Main",
     Icon = "home"
 })
 
--- Твой рабочий полет (Fly)
+-- 1. Fly Toggle
 MyTab:Toggle({
-    Title = "Полет (Fly)",
+    Title = "Fly",
     Value = false,
     Callback = function(state)
         if state then
@@ -68,17 +68,90 @@ MyTab:Toggle({
             task.spawn(function()
                 while _G.Flying and root and hum do
                     if hum.MoveDirection.Magnitude > 0 then
+                        -- Fly towards camera direction (Speed: 50)
                         _G.FlyBV.Velocity = cam.CFrame.LookVector * 50
                     else
+                        -- Hover in place if no keys are pressed
                         _G.FlyBV.Velocity = Vector3.new(0, 0.1, 0)
                     end
-                    task.wait()
+                    task.wait() -- 1 frame delay
                 end
             end)
         else
             _G.Flying = false
             if _G.FlyBV then 
-                _G.FlyBV:Destroy() 
+                _G.FlyBV:Destroy() -- Restore gravity
+            end
+        end
+    end
+})
+
+-- 2. ESP Toggle (Wallhack Highlight)
+local espConnection
+MyTab:Toggle({
+    Title = "ESP (Highlight)",
+    Value = false,
+    Callback = function(state)
+        _G.EspEnabled = state
+        
+        local function applyESP(player)
+            if player ~= game.Players.LocalPlayer and player.Character then
+                if _G.EspEnabled then
+                    if not player.Character:FindFirstChild("EclipseESP") then
+                        local highlight = Instance.new("Highlight")
+                        highlight.Name = "EclipseESP"
+                        highlight.FillColor = Color3.fromRGB(170, 0, 255) -- Signature Eclipse purple
+                        highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+                        highlight.FillTransparency = 0.5
+                        highlight.OutlineTransparency = 0
+                        highlight.Parent = player.Character
+                    end
+                else
+                    if player.Character:FindFirstChild("EclipseESP") then
+                        player.Character.EclipseESP:Destroy()
+                    end
+                end
+            end
+        end
+
+        if state then
+            -- Connect listener for current and upcoming players
+            espConnection = game.Players.PlayerAdded:Connect(function(player)
+                player.CharacterAdded:Connect(function()
+                    task.wait(0.5)
+                    applyESP(player)
+                end)
+            end)
+            
+            for _, player in ipairs(game.Players:GetPlayers()) do
+                applyESP(player)
+            end
+        else
+            -- Disconnect and clean up highlights
+            if espConnection then espConnection:Disconnect() end
+            for _, player in ipairs(game.Players:GetPlayers()) do
+                applyESP(player)
+            end
+        end
+    end
+})
+
+-- 3. Infinite Jump Toggle
+local infJumpConnection
+MyTab:Toggle({
+    Title = "Infinite Jump",
+    Value = false,
+    Callback = function(state)
+        if state then
+            infJumpConnection = game:GetService("UserInputService").JumpRequest:Connect(function()
+                local player = game.Players.LocalPlayer
+                if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+                    player.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+                end
+            end)
+        else
+            if infJumpConnection then
+                infJumpConnection:Disconnect()
             end
         end
     end
@@ -86,41 +159,42 @@ MyTab:Toggle({
 
 
 -- ========================================================
--- ВКЛАДКА: ИГРЫ (Новая вкладка)
+-- TAB: GAMES
 -- ========================================================
 local GamesTab = Window:Tab({
-    Title = "Игры",
-    Icon = "gamepad" -- Системная иконка джойстика
+    Title = "Games",
+    Icon = "gamepad"
 })
 
--- Кнопка 1: 99 nights (voidware)
+-- Button 1: 99 nights
 GamesTab:Button({
-    Title = "99 nights (voidware)",
+    Title = "99 nights (Voidware)",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VW-Add/main/nightsintheforest.lua", true))()
     end
 })
 
--- Кнопка 2: Заготовка под следующую игру
+-- Button 2: Rivals
 GamesTab:Button({
-    Title = "Игра #2 (Пусто)",
+    Title = "Rivals (z4us)",
     Callback = function()
-        -- Сюда потом вставишь второй loadstring
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/blackowl1231/Z3US/refs/heads/main/main.lua"))()
     end
 })
 
--- Кнопка 3: Заготовка
-GamesTab:Button({
-    Title = "Игра #3 (Пусто)",
-    Callback = function()
-        -- Сюда потом вставишь третий loadstring
-    end
+
+-- ========================================================
+-- TAB: UNIVERSAL
+-- ========================================================
+local UniversalTab = Window:Tab({
+    Title = "Universal",
+    Icon = "globe"
 })
 
--- Кнопка 4: Заготовка
-GamesTab:Button({
-    Title = "Игра #4 (Пусто)",
+-- Button 1: Solara Hub
+UniversalTab:Button({
+    Title = "Solara Hub",
     Callback = function()
-        -- Сюда потом вставишь четвертый loadstring
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/samuraa1/Solara-Hub/refs/heads/main/SH.lua'))()
     end
 })
