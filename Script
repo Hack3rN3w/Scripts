@@ -1,0 +1,126 @@
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
+
+-- ========================================================
+-- БЛОК АВТОРА (Надпись By Hack3rN3w в правом верхнем углу)
+-- ========================================================
+local WatermarkGui = Instance.new("ScreenGui")
+WatermarkGui.Name = "EclipseWatermark"
+local parentTarget = game:GetService("CoreGui") or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+WatermarkGui.Parent = parentTarget
+
+local Label = Instance.new("TextLabel")
+Label.Parent = WatermarkGui
+Label.Size = UDim2.new(0, 140, 0, 30)
+Label.Position = UDim2.new(1, -155, 0, 15) 
+Label.BackgroundColor3 = Color3.fromRGB(25, 25, 25) 
+Label.BackgroundTransparency = 0.2 
+Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+Label.Text = "By Hack3rN3w"
+Label.Font = Enum.Font.GothamBold 
+Label.TextSize = 13
+
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 6)
+Corner.Parent = Label
+
+local Stroke = Instance.new("UIStroke")
+Stroke.Color = Color3.fromRGB(50, 50, 50)
+Stroke.Thickness = 1
+Stroke.Parent = Label
+-- ========================================================
+
+
+-- Создаем окно Eclipse Client
+local Window = WindUI:CreateWindow({
+    Title = "Eclipse Client", 
+    Subtitle = "v1.0",
+    Icon = "moon", 
+    Size = UDim2.fromOffset(550, 380)
+})
+
+
+-- ========================================================
+-- ВКЛАДКА: ГЛАВНАЯ
+-- ========================================================
+local MyTab = Window:Tab({
+    Title = "Главная",
+    Icon = "home"
+})
+
+-- Твой рабочий полет (Fly)
+MyTab:Toggle({
+    Title = "Полет (Fly)",
+    Value = false,
+    Callback = function(state)
+        if state then
+            _G.Flying = true
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local root = character:WaitForChild("HumanoidRootPart")
+            local hum = character:WaitForChild("Humanoid")
+            local cam = workspace.CurrentCamera
+            
+            _G.FlyBV = Instance.new("BodyVelocity")
+            _G.FlyBV.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+            _G.FlyBV.Velocity = Vector3.new(0, 0, 0)
+            _G.FlyBV.Parent = root
+            
+            task.spawn(function()
+                while _G.Flying and root and hum do
+                    if hum.MoveDirection.Magnitude > 0 then
+                        _G.FlyBV.Velocity = cam.CFrame.LookVector * 50
+                    else
+                        _G.FlyBV.Velocity = Vector3.new(0, 0.1, 0)
+                    end
+                    task.wait()
+                end
+            end)
+        else
+            _G.Flying = false
+            if _G.FlyBV then 
+                _G.FlyBV:Destroy() 
+            end
+        end
+    end
+})
+
+
+-- ========================================================
+-- ВКЛАДКА: ИГРЫ (Новая вкладка)
+-- ========================================================
+local GamesTab = Window:Tab({
+    Title = "Игры",
+    Icon = "gamepad" -- Системная иконка джойстика
+})
+
+-- Кнопка 1: 99 nights (voidware)
+GamesTab:Button({
+    Title = "99 nights (voidware)",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VW-Add/main/nightsintheforest.lua", true))()
+    end
+})
+
+-- Кнопка 2: Заготовка под следующую игру
+GamesTab:Button({
+    Title = "Игра #2 (Пусто)",
+    Callback = function()
+        -- Сюда потом вставишь второй loadstring
+    end
+})
+
+-- Кнопка 3: Заготовка
+GamesTab:Button({
+    Title = "Игра #3 (Пусто)",
+    Callback = function()
+        -- Сюда потом вставишь третий loadstring
+    end
+})
+
+-- Кнопка 4: Заготовка
+GamesTab:Button({
+    Title = "Игра #4 (Пусто)",
+    Callback = function()
+        -- Сюда потом вставишь четвертый loadstring
+    end
+})
