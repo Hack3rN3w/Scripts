@@ -1,0 +1,99 @@
+-- ========================================================
+-- MOONIX CLIENT V1.0 (Stay-Open Edition)
+-- ========================================================
+
+-- 1. Load Fluent UI Library
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+
+-- 2. Safe Executor Check
+local executorName = "Unknown"
+local subTitleText = "In-Game Client Engine"
+local success, result = pcall(function() return identifyexecutor() end)
+
+if success and result then
+    executorName = tostring(result)
+    if executorName == "Wave" or executorName == "Wave Beta" then
+        subTitleText = "Enhanced for Wave Level 7+"
+    end
+end
+
+-- 3. Window Settings
+local Window = Fluent:CreateWindow({
+    Title = "Moonix Client v1.0",
+    SubTitle = subTitleText,
+    TabWidth = 160,
+    Size = UDim2.fromOffset(560, 400),
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl
+})
+
+local Tabs = {
+    Executor = Window:AddTab({ Title = "Moonix Exec", Icon = "code" }),
+    GameScripts = Window:AddTab({ Title = "Game Scripts", Icon = "gamepad" }),
+    General = Window:AddTab({ Title = "40+ General", Icon = "list" })
+}
+
+-- 4. EXECUTOR Tab
+local UserCode = ""
+Tabs.Executor:AddInput("Input", {
+    Title = "Moonix Compiler",
+    Placeholder = "-- Paste Lua code here...",
+    Callback = function(Value) UserCode = Value end
+})
+
+Tabs.Executor:AddButton({
+    Title = "Execute Code",
+    Callback = function()
+        if UserCode ~= "" then
+            local s, e = pcall(function() assert(loadstring(UserCode))() end)
+            if not s then Fluent:Notify({ Title = "Moonix Error!", Content = tostring(e), Duration = 5 }) end
+        end
+    end
+})
+
+-- 5. GAME SCRIPTS Tab
+local successInfo, info = pcall(function() return game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId) end)
+local gameName = (successInfo and info and info.Name) or "Unknown"
+
+if game.PlaceId == 4924922222 or string.find(string.lower(gameName), "brookhaven") then
+    -- BASE: Brookhaven
+    Tabs.GameScripts:AddButton({
+        Title = "Launch Hexagon Client",
+        Callback = function()
+            loadstring(game:HttpGet("https://haxhell.com/raw/brookhaven-rp-hexagon-hub"))()
+        end
+    })
+
+elseif game.PlaceId == 79546208627805 or string.find(string.lower(gameName), "99 nights") then
+    -- BASE: 99 Nights
+    Tabs.GameScripts:AddButton({
+        Title = "Launch Voidware",
+        Callback = function()
+            loadstring(game:HttpGet("https://rawscripts.net/raw/99-Nights-in-the-Forest-Voidware-165515"))()
+        end
+    })
+
+    Tabs.GameScripts:AddButton({
+        Title = "Launch FoxName",
+        Callback = function()
+            loadstring(game:HttpGet("https://rawscripts.net/raw/99-Nights-in-the-Forest-Foxname-Hub-Made-By-EchoBuddyYTT-110418"))()
+        end
+    })
+else
+    Tabs.GameScripts:AddParagraph({
+        Title = "Mode not recognized",
+        Content = "Game not in database. ID: " .. tostring(game.PlaceId) .. " | Name: " .. gameName
+    })
+end
+
+-- 6. GENERAL Tab
+Tabs.General:AddButton({
+    Title = "Infinite Yield",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+    end
+})
+
+-- Initialization
+Tabs.Executor:Select()
+Fluent:Notify({ Title = "Moonix Client", Content = "System loaded and ready!", Duration = 3 })
