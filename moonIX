@@ -13,7 +13,7 @@ local success, result = pcall(function() return identifyexecutor() end)
 if success and result then
     executorName = tostring(result)
     if executorName == "Wave" or executorName == "Wave Beta" then
-        subTitleText = "Enhanced for Wave Level 7+"
+        subTitleText = "Enhanced for Wave Level 2+"
     end
 end
 
@@ -79,6 +79,16 @@ elseif game.PlaceId == 79546208627805 or string.find(string.lower(gameName), "99
             loadstring(game:HttpGet("https://rawscripts.net/raw/99-Nights-in-the-Forest-Foxname-Hub-Made-By-EchoBuddyYTT-110418"))()
         end
     })
+
+elseif game.PlaceId == 13864661000 or string.find(string.lower(gameName), "break in 2") then
+    -- BASE: Break In 2
+    Tabs.GameScripts:AddButton({
+        Title = "Launch Ikf Hub",
+        Callback = function()
+            loadstring(game:HttpGet("https://pastefy.app/4H5Vb2in/raw"))()
+        end
+    })
+
 else
     Tabs.GameScripts:AddParagraph({
         Title = "Mode not recognized",
