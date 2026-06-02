@@ -7,13 +7,13 @@ local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/
 
 -- 2. Safe Executor Check
 local executorName = "Unknown"
-local subTitleText = "In-Game Client Engine"
+local subTitleText = "Level 2+ executors"
 local success, result = pcall(function() return identifyexecutor() end)
 
 if success and result then
     executorName = tostring(result)
-    if executorName == "Wave" or executorName == "Wave Beta" then
-        subTitleText = "Enhanced for Wave Level 2+"
+    if executorName == "wave" or executorName == "Wave Beta" then
+        subTitleText = "Enhanced for executors level 2+"
     end
 end
 
