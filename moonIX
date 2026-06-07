@@ -63,7 +63,7 @@ if game.PlaceId == 4924922222 or string.find(string.lower(gameName), "brookhaven
         end
     })
 
-elseif game.PlaceId == 79546208627805 or string.find(string.lower(gameName), "99 nights") then
+elseif game.PlaceId == 126509999114328or string.find(string.lower(gameName), "99 nights") then
     Tabs.GameScripts:AddButton({
         Title = "Launch Voidware",
         Callback = function()
