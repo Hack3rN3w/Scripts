@@ -1,5 +1,5 @@
 -- ========================================================
--- MOONIX CLIENT V1.0 (Stay-Open Edition)
+-- MOONIX CLIENT V1.0 (Universal Edition)
 -- ========================================================
 
 -- 1. Load Fluent UI Library
@@ -19,18 +19,18 @@ end
 
 -- 3. Window Settings
 local Window = Fluent:CreateWindow({
-    Title = "Moonix Client v1.0",
+    Title = "moonIX Client v1.0",
     SubTitle = subTitleText,
     TabWidth = 160,
-    Size = UDim2.fromOffset(560, 400),
+    Size = UDim2.fromOffset(560, 430), -- Слегка увеличил высоту для удобства
     Theme = "Dark",
     MinimizeKey = Enum.KeyCode.LeftControl
 })
 
 local Tabs = {
-    Executor = Window:AddTab({ Title = "Moonix Exec", Icon = "code" }),
-    GameScripts = Window:AddTab({ Title = "Game Scripts", Icon = "gamepad" }),
-    General = Window:AddTab({ Title = "40+ General", Icon = "list" })
+    Executor     = Window:AddTab({ Title = "Moonix Exec", Icon = "code" }),
+    GameScripts  = Window:AddTab({ Title = "Game Scripts", Icon = "gamepad" }),
+    Universal    = Window:AddTab({ Title = "Universal", Icon = "globe" }) -- Переименовано и обновлено
 }
 
 -- 4. EXECUTOR Tab
@@ -56,7 +56,6 @@ local successInfo, info = pcall(function() return game:GetService("MarketplaceSe
 local gameName = (successInfo and info and info.Name) or "Unknown"
 
 if game.PlaceId == 4924922222 or string.find(string.lower(gameName), "brookhaven") then
-    -- BASE: Brookhaven
     Tabs.GameScripts:AddButton({
         Title = "Launch Hexagon Client",
         Callback = function()
@@ -65,7 +64,6 @@ if game.PlaceId == 4924922222 or string.find(string.lower(gameName), "brookhaven
     })
 
 elseif game.PlaceId == 79546208627805 or string.find(string.lower(gameName), "99 nights") then
-    -- BASE: 99 Nights
     Tabs.GameScripts:AddButton({
         Title = "Launch Voidware",
         Callback = function()
@@ -81,7 +79,6 @@ elseif game.PlaceId == 79546208627805 or string.find(string.lower(gameName), "99
     })
 
 elseif game.PlaceId == 13864661000 or string.find(string.lower(gameName), "break in 2") then
-    -- BASE: Break In 2
     Tabs.GameScripts:AddButton({
         Title = "Launch Ikf Hub",
         Callback = function()
@@ -96,14 +93,67 @@ else
     })
 end
 
--- 6. GENERAL Tab
-Tabs.General:AddButton({
+-- 6. UNIVERSAL Tab (40+ Tools & Scripts)
+Tabs.Universal:AddParagraph({ Title = "Admin Commands", Content = "Основные консоли управления" })
+
+Tabs.Universal:AddButton({
     Title = "Infinite Yield",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
     end
 })
 
+Tabs.Universal:AddButton({
+    Title = "CMD-X",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source"))()
+    end
+})
+
+Tabs.Universal:AddParagraph({ Title = "Visuals & HUBs", Content = "Мульти-хабы и подсветка игроков" })
+
+Tabs.Universal:AddButton({
+    Title = "Hydroxide (Decompiler/Spy)",
+    Callback = function()
+        local owner = "Upbolt"
+        local branch = "revision"
+        local repo = "Hydroxide"
+        loadstring(game:HttpGet(string.format("https://raw.githubusercontent.com/%s/%s/%s/init.lua", owner, repo, branch)))()
+    end
+})
+
+Tabs.Universal:AddButton({
+    Title = "Unnamed ESP",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ic3w0lf22/Unnamed-ESP/master/code.lua"))()
+    end
+})
+
+Tabs.Universal:AddButton({
+    Title = "OwlHub",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"))()
+    end
+})
+
+Tabs.Universal:AddParagraph({ Title = "Utilities", Content = "Полезные инструменты для оптимизации и обхода" })
+
+Tabs.Universal:AddButton({
+    Title = "Dex Explorer (V4)",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+    end
+})
+
+Tabs.Universal:AddButton({
+    Title = "Rejoin Server",
+    Callback = function()
+        local ts = game:GetService("TeleportService")
+        local p = game:GetService("Players").LocalPlayer
+        ts:Teleport(game.PlaceId, p)
+    end
+})
+
 -- Initialization
 Tabs.Executor:Select()
-Fluent:Notify({ Title = "Moonix Client", Content = "System loaded and ready!", Duration = 3 })
+Fluent:Notify({ Title = "moonIX Client", Content = "Universal System loaded!", Duration = 3 })
