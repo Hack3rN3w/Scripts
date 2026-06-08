@@ -1,5 +1,5 @@
 -- ========================================================
--- MOONIX CLIENT V1.0 (Universal Edition)
+-- MOONIX CLIENT V1.0 (Universal Edition - Fixed)
 -- ========================================================
 
 -- 1. Load Fluent UI Library
@@ -22,7 +22,7 @@ local Window = Fluent:CreateWindow({
     Title = "moonIX Client v1.0",
     SubTitle = subTitleText,
     TabWidth = 160,
-    Size = UDim2.fromOffset(560, 430), -- Слегка увеличил высоту для удобства
+    Size = UDim2.fromOffset(560, 430),
     Theme = "Dark",
     MinimizeKey = Enum.KeyCode.LeftControl
 })
@@ -30,7 +30,7 @@ local Window = Fluent:CreateWindow({
 local Tabs = {
     Executor     = Window:AddTab({ Title = "Moonix Exec", Icon = "code" }),
     GameScripts  = Window:AddTab({ Title = "Game Scripts", Icon = "gamepad" }),
-    Universal    = Window:AddTab({ Title = "Universal", Icon = "globe" }) -- Переименовано и обновлено
+    Universal    = Window:AddTab({ Title = "Universal", Icon = "globe" })
 }
 
 -- 4. EXECUTOR Tab
@@ -54,8 +54,9 @@ Tabs.Executor:AddButton({
 -- 5. GAME SCRIPTS Tab
 local successInfo, info = pcall(function() return game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId) end)
 local gameName = (successInfo and info and info.Name) or "Unknown"
+local currentPlaceId = tostring(game.PlaceId) -- Безопасный перевод ID в строку
 
-if game.PlaceId == 4924922222 or string.find(string.lower(gameName), "brookhaven") then
+if currentPlaceId == "4924922222" or string.find(string.lower(gameName), "brookhaven") then
     Tabs.GameScripts:AddButton({
         Title = "Launch Hexagon Client",
         Callback = function()
@@ -63,7 +64,8 @@ if game.PlaceId == 4924922222 or string.find(string.lower(gameName), "brookhaven
         end
     })
 
-elseif game.PlaceId == 126509999114328or string.find(string.lower(gameName), "99 nights") then
+-- ТУТ ОШИБКА ИСПРАВЛЕНА: добавлен пробел, ID обернут в кавычки, добавлен поиск по слову "ночей"
+elseif currentPlaceId == "126509999114328" or string.find(string.lower(gameName), "99 nights") or string.find(string.lower(gameName), "ночей") then
     Tabs.GameScripts:AddButton({
         Title = "Launch Voidware",
         Callback = function()
@@ -78,7 +80,7 @@ elseif game.PlaceId == 126509999114328or string.find(string.lower(gameName), "99
         end
     })
 
-elseif game.PlaceId == 13864661000 or string.find(string.lower(gameName), "break in 2") then
+elseif currentPlaceId == "13864661000" or string.find(string.lower(gameName), "break in 2") then
     Tabs.GameScripts:AddButton({
         Title = "Launch Ikf Hub",
         Callback = function()
@@ -89,7 +91,7 @@ elseif game.PlaceId == 13864661000 or string.find(string.lower(gameName), "break
 else
     Tabs.GameScripts:AddParagraph({
         Title = "Mode not recognized",
-        Content = "Game not in database. ID: " .. tostring(game.PlaceId) .. " | Name: " .. gameName
+        Content = "Game not in database. ID: " .. currentPlaceId .. " | Name: " .. gameName
     })
 end
 
