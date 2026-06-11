@@ -410,7 +410,24 @@ Tab4:AddButton("Vertex MM2", "Original Vertex Hub for MM2 (Autofarm, ESP)", "htt
 ---------------------------------------------------------------------
 local Tab5 = CreateTab("Survive Zombie Arena")
 Tab5:AddButton("Foxname Hub", "Best Keyless Script with OP combat features!", "https://rawscripts.net/raw/Survive-Zombie-Arena-Best-Keyless-Script-Foxname-Hub-222076")
+-- Создание вкладки
+local Tab = Window:CreateTab("Dead Rails") 
 
+-- Кнопка Ringta
+Tab:CreateButton({
+    Name = "Ringta (Best Keyless Script)",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Dead-Rails-Alpha-DEAD-RAILS-AUTOSWING-INF-HEALTH-UI-40057"))()
+    end
+})
+
+-- Кнопка Foxname
+Tab:CreateButton({
+    Name = "Foxname (Best Keyless Script after Ringta)",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Dead-Rails-Beta-Foxname-hub-script-194122"))()
+    end
+})
 -- ================= SAFE CHECK LOGIC =================
 CheckBtn.MouseButton1Click:Connect(function()
     CheckBtn.Text = "Checking..."
