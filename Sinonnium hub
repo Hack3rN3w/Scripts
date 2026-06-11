@@ -421,13 +421,16 @@ Tab:CreateButton({
     end
 })
 
+---------------------------------------------------------------------
+-- ВКЛАДКА: Dead Rails (ИСПРАВЛЕННЫЙ ВАРИАНТ)
+---------------------------------------------------------------------
+local Tab6 = CreateTab("Dead Rails") 
+
+-- Кнопка Ringta
+Tab6:AddButton("Ringta (Best Keyless)", "Best keyless script for Dead Rails", "https://rawscripts.net/raw/Dead-Rails-Alpha-DEAD-RAILS-AUTOSWING-INF-HEALTH-UI-40057")
+
 -- Кнопка Foxname
-Tab:CreateButton({
-    Name = "Foxname (Best Keyless Script after Ringta)",
-    Callback = function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Dead-Rails-Beta-Foxname-hub-script-194122"))()
-    end
-})
+Tab6:AddButton("Foxname (Best Keyless)", "Best keyless script after Ringta", "https://rawscripts.net/raw/Dead-Rails-Beta-Foxname-hub-script-194122")
 -- ================= SAFE CHECK LOGIC =================
 CheckBtn.MouseButton1Click:Connect(function()
     CheckBtn.Text = "Checking..."
