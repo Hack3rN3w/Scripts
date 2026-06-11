@@ -390,7 +390,12 @@ local Tab1 = CreateTab("Universal Admin")
 Tab1:AddButton("CMD-X", "Powerful and stable command console (Perfect for Wave)", "https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source")
 Tab1:AddButton("Nameless Admin", "Admin script with stylish visual commands", "https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/Source")
 Tab1:AddButton("Fates Admin", "Beautiful admin panel focused on custom animations", "https://raw.githubusercontent.com/fatesc/fatesAdmin/main/main.lua")
-
+UniversalTab:CreateButton({
+    Name = "Z4us (Level 7+)",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/blackowl1231/Z3US/refs/heads/main/main.lua"))()
+    end,
+})
 local Tab2 = CreateTab("99 nights")
 Tab2:AddButton("Foxname Hub", "The best keyless script for 99 nights mode", "https://raw.githubusercontent.com/caomod2077/Script/refs/heads/main/FoxnameHub.lua")
 
