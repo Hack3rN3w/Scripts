@@ -403,6 +403,11 @@ Tab3:AddButton("Harlen hub", "The best keyless script for Break In 2 mode", "htt
 local Tab4 = CreateTab("Murder Mystery 2")
 Tab4:AddButton("Vertex MM2", "Original Vertex Hub for MM2 (Autofarm, ESP)", "https://raw.smokingscripts.org/vertex.lua")
 
+---------------------------------------------------------------------
+-- ВКЛАДКА: Survive Zombie Arena (ИСПРАВЛЕНО!)
+---------------------------------------------------------------------
+local Tab5 = CreateTab("Survive Zombie Arena")
+Tab5:AddButton("Foxname Hub", "Best Keyless Script with OP combat features!", "https://rawscripts.net/raw/Survive-Zombie-Arena-Best-Keyless-Script-Foxname-Hub-222076")
 
 -- ================= SAFE CHECK LOGIC =================
 CheckBtn.MouseButton1Click:Connect(function()
