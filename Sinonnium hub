@@ -398,7 +398,7 @@ local Tab3 = CreateTab("Break In")
 Tab3:AddLabel("Break In 1")
 Tab3:AddButton("XHub", "Top multi-functional script for the first part", "https://raw.githubusercontent.com/Bebo-Mods/XHub/main/HubLoader.lua")
 Tab3:AddLabel("Break In 2")
-Tab3:AddButton("Actual hub", "The best keyless script for Break In 2 mode (level 5+ executors)", "https://raw.githubusercontent.com/Iptxt/ActualHub/refs/heads/main/Loader");
+Tab3:AddButton("Actual hub (level 5+ executors)", "The best keyless script for Break In 2 mode (level 5+ executors)", "https://raw.githubusercontent.com/Iptxt/ActualHub/refs/heads/main/Loader");
 
 local Tab4 = CreateTab("Murder Mystery 2")
 Tab4:AddButton("Vertex MM2", "Original Vertex Hub for MM2 (Autofarm, ESP)", "https://raw.smokingscripts.org/vertex.lua")
