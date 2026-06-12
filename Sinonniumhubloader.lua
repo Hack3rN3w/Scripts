@@ -4,7 +4,7 @@ local success, code = pcall(function()
 end)
 
 if success then
-    print("Succesful:", #code) -- если тут 0 или мало, значит файл не скачался
+    print("Succesful") -- если тут 0 или мало, значит файл не скачался
     if #code > 0 then
         loadstring(code)()
     else
