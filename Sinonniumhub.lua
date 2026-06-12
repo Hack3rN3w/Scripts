@@ -389,42 +389,48 @@ Tab1:AddButton("CMD-X", "Powerful and stable command console (Perfect for Wave)"
 Tab1:AddButton("Nameless Admin", "Admin script with stylish visual commands", "https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/Source")
 Tab1:AddButton("Fates Admin", "Beautiful admin panel focused on custom animations", "https://raw.githubusercontent.com/fatesc/fatesAdmin/main/main.lua")
 
--- Предположим, 'Tab' — это твоя созданная вкладка через библиотеку
-local Tab = Window:CreateTab("Executor", 4483362458) -- ID иконки, если нужно
+-- УДАЛИ ЭТОТ КУСОК (он вызывает ошибку):
+-- local Tab = Window:CreateTab("Executor", 4483362458)
+-- ... (и всё, что ниже до следующего блока)
 
--- Поле ввода
-local CodeBox = Tab:CreateInput({
-    Name = "Script Input",
-    PlaceholderText = "Вставь свой код сюда...",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Text)
-        _G.ScriptToExecute = Text -- Сохраняем введенный код в переменную
-    end,
-})
+-- ВСТАВЬ ВМЕСТО НЕГО ЭТО:
+local ExecutorTab = CreateTab("Executor")
 
--- Кнопка запуска
-Tab:CreateButton({
-    Name = "Execute Script",
-    Callback = function()
-        if _G.ScriptToExecute then
-            local success, err = pcall(function()
-                loadstring(_G.ScriptToExecute)()
-            end)
-            if not success then
-                warn("Ошибка при выполнении: " .. tostring(err))
-            end
-        end
-    end,
-})
+-- Создаем поле ввода в твоем стиле
+local InputBox = Instance.new("TextBox")
+InputBox.Size = UDim2.new(1, -10, 0, 40)
+InputBox.Position = UDim2.fromOffset(5, 10)
+InputBox.BackgroundColor3 = Color3.fromRGB(20, 20, 24)
+InputBox.PlaceholderText = "Вставь сюда код..."
+InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+InputBox.Font = Enum.Font.Gotham
+InputBox.TextSize = 12
+InputBox.Parent = pages[#pages] -- Добавляем на последнюю созданную страницу
 
--- Кнопка очистки
-Tab:CreateButton({
-    Name = "Clear Input",
-    Callback = function()
-        _G.ScriptToExecute = ""
-        -- Тут зависит от библиотеки, как обновить поле визуально
-    end,
-})
+local InputCorner = Instance.new("UICorner")
+InputCorner.CornerRadius = UDim.new(0, 5)
+InputCorner.Parent = InputBox
+
+-- Кнопка исполнения
+local ExecBtn = Instance.new("TextButton")
+ExecBtn.Size = UDim2.new(1, -10, 0, 30)
+ExecBtn.Position = UDim2.fromOffset(5, 60)
+ExecBtn.BackgroundColor3 = Color3.fromRGB(135, 80, 255)
+ExecBtn.Text = "Execute"
+ExecBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExecBtn.Font = Enum.Font.GothamBold
+ExecBtn.TextSize = 12
+ExecBtn.Parent = pages[#pages]
+
+ExecBtn.MouseButton1Click:Connect(function()
+    local code = InputBox.Text
+    if code ~= "" then
+        local success, err = pcall(function()
+            loadstring(code)()
+        end)
+        if not success then warn("Ошибка: " .. tostring(err)) end
+    end
+end)
 
 local TabUniversal = CreateTab("Universal")
 TabUniversal:AddButton("Z4us (Level 7+)", "Universal aimbot", "https://raw.githubusercontent.com/blackowl1231/Z3US/refs/heads/main/main.lua")
