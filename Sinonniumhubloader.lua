@@ -1,24 +1,15 @@
--- Sinonnium Hub v1.0 | Official Loader
-local Notification = game:GetService("StarterGui")
-
-local function notify(text)
-    Notification:SetCore("SendNotification", {
-        Title = "Sinonnium Hub",
-        Text = text,
-        Duration = 3
-    })
-end
-
-notify("Loading Sinonnium Hub...")
-
-local success, result = pcall(function()
---the loader
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Hack3rN3w/Scripts/main/Sinonniumhub.lua"))()
+local url = "https://raw.githubusercontent.com/Hack3rN3w/Scripts/main/Sinonniumhub.lua"
+local success, code = pcall(function()
+    return game:HttpGet(url)
 end)
 
 if success then
-    notify("Loaded successfully!")
+    print("Succesful:", #code) -- если тут 0 или мало, значит файл не скачался
+    if #code > 0 then
+        loadstring(code)()
+    else
+        warn("Скрипт пустой!")
+    end
 else
-    notify("Error: " .. tostring(result))
-    warn("Sinonnium Hub Error: " .. tostring(result))
+    warn("Error of opening. Try changing executor: " .. tostring(code))
 end
