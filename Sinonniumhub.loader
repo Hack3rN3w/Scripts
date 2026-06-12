@@ -1,14 +1,10 @@
---its just a loader
--- [[ Sinonnium Hub Official Loader ]] --
-if not game:IsLoaded() then
-    game.Loaded:Wait()
-end
+-- Sinonnium Hub Official Loader
+local url = "https://raw.githubusercontent.com/Hack3rN3w/Scripts/main/Sinonniumhub.lua"
 
--- Loading the main script from your RAW GitHub
 local success, result = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Hack3rN3w/Scripts/main/Sinonnium%20hub"))()
+    return loadstring(game:HttpGet(url))()
 end)
 
 if not success then
-    warn("Sinonnium Hub failed to load: " .. tostring(result))
+    warn("Sinonnium Hub Error: " .. tostring(result))
 end
