@@ -177,6 +177,7 @@ Separator.BorderSizePixel = 0
 Separator.Parent = Sidebar
 
 local PremiumCircle = Instance.new("Frame")
+PremiumCircle.Name = "PremiumCircle"
 PremiumCircle.Size = UDim2.fromOffset(45, 45)
 PremiumCircle.Position = UDim2.fromOffset(15, 15)
 PremiumCircle.BackgroundColor3 = Color3.fromRGB(22, 22, 26)
@@ -212,6 +213,19 @@ HubTitle.Font = Enum.Font.GothamBold
 HubTitle.TextSize = 13
 HubTitle.Parent = Sidebar
 
+-- СКРОЛЛ-КОНТЕЙНЕР ДЛЯ ТАБОВ В БОКОВОЙ ПАНЕЛИ
+local TabScroll = Instance.new("ScrollingFrame")
+TabScroll.Name = "TabScroll"
+TabScroll.Size = UDim2.new(1, 0, 1, -105)
+TabScroll.Position = UDim2.fromOffset(0, 100)
+TabScroll.BackgroundTransparency = 1
+TabScroll.BorderSizePixel = 0
+TabScroll.ScrollBarThickness = 2
+TabScroll.ScrollBarImageColor3 = Color3.fromRGB(135, 80, 255)
+TabScroll.Active = true
+TabScroll.ScrollingDirection = Enum.ScrollingDirection.Y
+TabScroll.Parent = Sidebar
+
 local PageContainer = Instance.new("Frame")
 PageContainer.Size = UDim2.new(1, -160, 1, -20)
 PageContainer.Position = UDim2.fromOffset(155, 10)
@@ -226,8 +240,8 @@ local function CreateTab(name)
     tabCount = tabCount + 1
     
     local TabBtn = Instance.new("TextButton")
-    TabBtn.Size = UDim2.new(1, -10, 0, 32)
-    TabBtn.Position = UDim2.fromOffset(5, 100 + ((tabCount - 1) * 36))
+    TabBtn.Size = UDim2.new(1, -12, 0, 32)
+    TabBtn.Position = UDim2.fromOffset(5, (tabCount - 1) * 36)
     TabBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
     TabBtn.BackgroundTransparency = 1
     TabBtn.Text = "  " .. name
@@ -235,16 +249,24 @@ local function CreateTab(name)
     TabBtn.Font = Enum.Font.GothamSemibold
     TabBtn.TextSize = 11
     TabBtn.TextXAlignment = Enum.TextXAlignment.Left
-    TabBtn.Parent = Sidebar
+    TabBtn.Parent = TabScroll
+    
+    TabScroll.CanvasSize = UDim2.new(0, 0, 0, tabCount * 36 + 10)
     
     local BtnCorner = Instance.new("UICorner")
     BtnCorner.CornerRadius = UDim.new(0, 4)
     BtnCorner.Parent = TabBtn
     
-    local Page = Instance.new("Frame")
+    local Page = Instance.new("ScrollingFrame")
     Page.Size = UDim2.fromScale(1, 1)
     Page.BackgroundTransparency = 1
     Page.Visible = false
+    Page.BorderSizePixel = 0
+    Page.ScrollBarThickness = 4
+    Page.ScrollBarImageColor3 = Color3.fromRGB(135, 80, 255)
+    Page.CanvasSize = UDim2.new(0, 0, 0, 0)
+    Page.Active = true -- Захватывает тач-события (не дает двигать окно при скролле)
+    Page.ScrollingDirection = Enum.ScrollingDirection.Y -- Разрешаем скролл строго вверх/вниз
     Page.Parent = PageContainer
     
     if tabCount == 1 then
@@ -272,13 +294,14 @@ local function CreateTab(name)
     
     function pageFunctions:AddButton(title, desc, url)
         local BtnFrame = Instance.new("Frame")
-        BtnFrame.Size = UDim2.new(1, -10, 0, 46)
+        BtnFrame.Size = UDim2.new(1, -16, 0, 46)
         BtnFrame.Position = UDim2.fromOffset(5, elementOffset)
         BtnFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 24)
         BtnFrame.BorderSizePixel = 0
         BtnFrame.Parent = Page
         
         elementOffset = elementOffset + 52
+        Page.CanvasSize = UDim2.new(0, 0, 0, elementOffset + 10)
         
         local FrameCorner = Instance.new("UICorner")
         FrameCorner.CornerRadius = UDim.new(0, 5)
@@ -353,7 +376,7 @@ local function CreateTab(name)
     
     function pageFunctions:AddLabel(text)
         local Label = Instance.new("TextLabel")
-        Label.Size = UDim2.new(1, -10, 0, 25)
+        Label.Size = UDim2.new(1, -16, 0, 25)
         Label.Position = UDim2.fromOffset(8, elementOffset + 5)
         Label.BackgroundTransparency = 1
         Label.Text = text
@@ -364,6 +387,89 @@ local function CreateTab(name)
         Label.Parent = Page
         
         elementOffset = elementOffset + 32
+        Page.CanvasSize = UDim2.new(0, 0, 0, elementOffset + 10)
+    end
+
+    function pageFunctions:AddExecutorLayout()
+        local CodeBox = Instance.new("TextBox")
+        CodeBox.Size = UDim2.new(1, -16, 0, 180)
+        CodeBox.Position = UDim2.fromOffset(5, elementOffset)
+        CodeBox.BackgroundColor3 = Color3.fromRGB(20, 20, 24)
+        CodeBox.BorderSizePixel = 0
+        CodeBox.ClearTextOnFocus = false
+        CodeBox.MultiLine = true
+        CodeBox.Text = ""
+        CodeBox.PlaceholderText = "Paste your code here..."
+        CodeBox.PlaceholderColor3 = Color3.fromRGB(100, 100, 110)
+        CodeBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+        CodeBox.Font = Enum.Font.Code
+        CodeBox.TextSize = 11
+        CodeBox.TextXAlignment = Enum.TextXAlignment.Left
+        CodeBox.TextYAlignment = Enum.TextYAlignment.Top
+        CodeBox.Parent = Page
+
+        local CodeCorner = Instance.new("UICorner")
+        CodeCorner.CornerRadius = UDim.new(0, 6)
+        CodeCorner.Parent = CodeBox
+
+        local CodeStroke = Instance.new("UIStroke")
+        CodeStroke.Color = Color3.fromRGB(35, 35, 40)
+        CodeStroke.Thickness = 1
+        CodeStroke.Parent = CodeBox
+
+        elementOffset = elementOffset + 195
+
+        local ExecButton = Instance.new("TextButton")
+        ExecButton.Size = UDim2.new(0.5, -10, 0, 36)
+        ExecButton.Position = UDim2.new(0, 5, 0, elementOffset)
+        ExecButton.BackgroundColor3 = Color3.fromRGB(135, 80, 255)
+        ExecButton.Text = "Execute Script"
+        ExecButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        ExecButton.Font = Enum.Font.GothamBold
+        ExecButton.TextSize = 12
+        ExecButton.Parent = Page
+
+        local ExecCorner = Instance.new("UICorner")
+        ExecCorner.CornerRadius = UDim.new(0, 5)
+        ExecCorner.Parent = ExecButton
+
+        local ClearButton = Instance.new("TextButton")
+        ClearButton.Size = UDim2.new(0.5, -10, 0, 36)
+        ClearButton.Position = UDim2.new(0.5, 5, 0, elementOffset)
+        ClearButton.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+        ClearButton.Text = "Clear Input"
+        ClearButton.TextColor3 = Color3.fromRGB(150, 150, 160)
+        ClearButton.Font = Enum.Font.GothamSemibold
+        ClearButton.TextSize = 12
+        ClearButton.Parent = Page
+
+        local ClearCorner = Instance.new("UICorner")
+        ClearCorner.CornerRadius = UDim.new(0, 5)
+        ClearCorner.Parent = ClearButton
+
+        local ClearStroke = Instance.new("UIStroke")
+        ClearStroke.Color = Color3.fromRGB(45, 45, 50)
+        ClearStroke.Thickness = 1
+        ClearStroke.Parent = ClearButton
+
+        elementOffset = elementOffset + 46
+        Page.CanvasSize = UDim2.new(0, 0, 0, elementOffset + 10)
+
+        ExecButton.MouseButton1Click:Connect(function()
+            local code = CodeBox.Text
+            if code and code ~= "" then
+                local success, err = pcall(function()
+                    loadstring(code)()
+                end)
+                if not success then
+                    warn("Error executing: " .. tostring(err))
+                end
+            end
+        end)
+
+        ClearButton.MouseButton1Click:Connect(function()
+            CodeBox.Text = ""
+        end)
     end
     
     return pageFunctions
@@ -383,54 +489,14 @@ CloseBtn.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
 
--- ================= MENU CONTENT =================
+-- ==================== MENU CONTENT ====================
 local Tab1 = CreateTab("Universal Admin")
 Tab1:AddButton("CMD-X", "Powerful and stable command console (Perfect for Wave)", "https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source")
 Tab1:AddButton("Nameless Admin", "Admin script with stylish visual commands", "https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/Source")
 Tab1:AddButton("Fates Admin", "Beautiful admin panel focused on custom animations", "https://raw.githubusercontent.com/fatesc/fatesAdmin/main/main.lua")
 
--- УДАЛИ ЭТОТ КУСОК (он вызывает ошибку):
--- local Tab = Window:CreateTab("Executor", 4483362458)
--- ... (и всё, что ниже до следующего блока)
-
--- ВСТАВЬ ВМЕСТО НЕГО ЭТО:
-local ExecutorTab = CreateTab("Executor")
-
--- Создаем поле ввода в твоем стиле
-local InputBox = Instance.new("TextBox")
-InputBox.Size = UDim2.new(1, -10, 0, 40)
-InputBox.Position = UDim2.fromOffset(5, 10)
-InputBox.BackgroundColor3 = Color3.fromRGB(20, 20, 24)
-InputBox.PlaceholderText = "Вставь сюда код..."
-InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-InputBox.Font = Enum.Font.Gotham
-InputBox.TextSize = 12
-InputBox.Parent = pages[#pages] -- Добавляем на последнюю созданную страницу
-
-local InputCorner = Instance.new("UICorner")
-InputCorner.CornerRadius = UDim.new(0, 5)
-InputCorner.Parent = InputBox
-
--- Кнопка исполнения
-local ExecBtn = Instance.new("TextButton")
-ExecBtn.Size = UDim2.new(1, -10, 0, 30)
-ExecBtn.Position = UDim2.fromOffset(5, 60)
-ExecBtn.BackgroundColor3 = Color3.fromRGB(135, 80, 255)
-ExecBtn.Text = "Execute"
-ExecBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ExecBtn.Font = Enum.Font.GothamBold
-ExecBtn.TextSize = 12
-ExecBtn.Parent = pages[#pages]
-
-ExecBtn.MouseButton1Click:Connect(function()
-    local code = InputBox.Text
-    if code ~= "" then
-        local success, err = pcall(function()
-            loadstring(code)()
-        end)
-        if not success then warn("Ошибка: " .. tostring(err)) end
-    end
-end)
+local TabExecutor = CreateTab("Executor")
+TabExecutor:AddExecutorLayout()
 
 local TabUniversal = CreateTab("Universal")
 TabUniversal:AddButton("Z4us (Level 7+)", "Universal aimbot", "https://raw.githubusercontent.com/blackowl1231/Z3US/refs/heads/main/main.lua")
@@ -442,7 +508,7 @@ local Tab3 = CreateTab("Break In")
 Tab3:AddLabel("Break In 1")
 Tab3:AddButton("XHub", "Top multi-functional script for the first part", "https://raw.githubusercontent.com/Bebo-Mods/XHub/main/HubLoader.lua")
 Tab3:AddLabel("Break In 2")
-Tab3:AddButton("Actual hub (level 5+ executors)", "The best keyless script for Break In 2 mode (level 5+ executors)", "https://raw.githubusercontent.com/Iptxt/ActualHub/refs/heads/main/Loader");
+Tab3:AddButton("Actual hub (level 5+ executors)", "The best keyless script for Break In 2 mode (level 5+ executors)", "https://raw.githubusercontent.com/Iptxt/ActualHub/refs/heads/main/Loader")
 
 local Tab4 = CreateTab("Murder Mystery 2")
 Tab4:AddButton("Vertex MM2", "Original Vertex Hub for MM2 (Autofarm, ESP)", "https://raw.smokingscripts.org/vertex.lua")
@@ -491,4 +557,4 @@ CheckBtn.MouseButton1Click:Connect(function()
             CheckBtn.Text = "Check Key"
         end
     end)
-end)
+end
