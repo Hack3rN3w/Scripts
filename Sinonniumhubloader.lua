@@ -12,7 +12,7 @@ end
 notify("Loading Sinonnium Hub...")
 
 local success, result = pcall(function()
-    -- Сюда ставим твою RAW-ссылку
+-the loader
     return loadstring(game:HttpGet("https://raw.githubusercontent.com/Hack3rN3w/Scripts/main/Sinonniumhub.lua"))()
 end)
 
