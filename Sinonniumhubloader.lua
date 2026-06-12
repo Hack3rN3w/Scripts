@@ -15,7 +15,7 @@ if success then
         
         -- 3. Если loadstring вернул функцию (а не nil), то запускаем её
         if executableFunction then
-            print("Скрипт успешно запущен!")
+            print("Script opened!")
             executableFunction() 
         else
             -- Если внутри скачанного скрипта была синтаксическая ошибка
@@ -23,8 +23,8 @@ if success then
         end
         
     else
-        warn("Скрипт пустой!")
+        warn("Script is empty!")
     end
 else
-    warn("Ошибка подключения. Попробуй сменить эксплоит: " .. tostring(code))
+    warn("Error executing. Try changing executor: " .. tostring(code))
 end
