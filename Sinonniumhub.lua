@@ -389,6 +389,43 @@ Tab1:AddButton("CMD-X", "Powerful and stable command console (Perfect for Wave)"
 Tab1:AddButton("Nameless Admin", "Admin script with stylish visual commands", "https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/Source")
 Tab1:AddButton("Fates Admin", "Beautiful admin panel focused on custom animations", "https://raw.githubusercontent.com/fatesc/fatesAdmin/main/main.lua")
 
+-- Предположим, 'Tab' — это твоя созданная вкладка через библиотеку
+local Tab = Window:CreateTab("Executor", 4483362458) -- ID иконки, если нужно
+
+-- Поле ввода
+local CodeBox = Tab:CreateInput({
+    Name = "Script Input",
+    PlaceholderText = "Вставь свой код сюда...",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        _G.ScriptToExecute = Text -- Сохраняем введенный код в переменную
+    end,
+})
+
+-- Кнопка запуска
+Tab:CreateButton({
+    Name = "Execute Script",
+    Callback = function()
+        if _G.ScriptToExecute then
+            local success, err = pcall(function()
+                loadstring(_G.ScriptToExecute)()
+            end)
+            if not success then
+                warn("Ошибка при выполнении: " .. tostring(err))
+            end
+        end
+    end,
+})
+
+-- Кнопка очистки
+Tab:CreateButton({
+    Name = "Clear Input",
+    Callback = function()
+        _G.ScriptToExecute = ""
+        -- Тут зависит от библиотеки, как обновить поле визуально
+    end,
+})
+
 local TabUniversal = CreateTab("Universal")
 TabUniversal:AddButton("Z4us (Level 7+)", "Universal aimbot", "https://raw.githubusercontent.com/blackowl1231/Z3US/refs/heads/main/main.lua")
 
