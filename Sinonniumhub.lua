@@ -1,6 +1,6 @@
 --by executing the script you agree that im not responsible for bans
-local GITHUB_WEB_URL = "https://github.com/Hack3rN3w/Scripts/tree/main/Sinonnium%20hub%20key"
-local GITHUB_KEY_URL = "https://raw.githubusercontent.com/Hack3w/Scripts/main/SinonniumKey"
+local GITHUB_WEB_URL = "https://github.com/Hack3rN3w/Scripts/blob/main/SinonniumKey"
+local GITHUB_KEY_URL = "https://raw.githubusercontent.com/Hack3rN3w/Scripts/main/SinonniumKey"
 
 task.wait(0.2)
 
@@ -265,8 +265,8 @@ local function CreateTab(name)
     Page.ScrollBarThickness = 4
     Page.ScrollBarImageColor3 = Color3.fromRGB(135, 80, 255)
     Page.CanvasSize = UDim2.new(0, 0, 0, 0)
-    Page.Active = true -- Захватывает тач-события (не дает двигать окно при скролле)
-    Page.ScrollingDirection = Enum.ScrollingDirection.Y -- Разрешаем скролл строго вверх/вниз
+    Page.Active = true 
+    Page.ScrollingDirection = Enum.ScrollingDirection.Y 
     Page.Parent = PageContainer
     
     if tabCount == 1 then
@@ -525,15 +525,36 @@ CheckBtn.MouseButton1Click:Connect(function()
     CheckBtn.Text = "Checking..."
     
     task.spawn(function()
+        -- Добавляем os.time() чтобы обойти жесткий кэш HttpGet у Роблокса
+        local cacheBusterUrl = GITHUB_KEY_URL .. "?t=" .. tostring(os.time())
+        
         local success, serverKey = pcall(function()
-            return game:HttpGet(GITHUB_KEY_URL)
+            return game:HttpGet(cacheBusterUrl)
         end)
         
+        -- Выводим логи в консоль (F9), чтобы сразу видеть, что ответил GitHub
+        print("[Sinonnium Debug] HttpGet Success Status:", success)
+        print("[Sinonnium Debug] Raw response from GitHub:", tostring(serverKey))
+        
         if success and serverKey then
-            serverKey = serverKey:gsub("%s+", "")
+            -- Чистим пробелы и переносы строк
+            local cleanServerKey = serverKey:gsub("%s+", "")
             local userKey = KeyInput.Text:gsub("%s+", "")
             
-            if userKey == serverKey then
+            print("[Sinonnium Debug] Cleaned Server Key:", "'" .. cleanServerKey .. "'")
+            print("[Sinonnium Debug] Cleaned User Input:", "'" .. userKey .. "'")
+            
+            -- Если Гитхаб вернул 404 страницу вместо ключа
+            if cleanServerKey:find("404") or cleanServerKey == "" then
+                StatusLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
+                StatusLabel.Text = "Error: Key file not found on GitHub (404)!"
+                CheckBtn.Text = "Error"
+                task.wait(2)
+                CheckBtn.Text = "Check Key"
+                return
+            end
+            
+            if userKey == cleanServerKey then
                 StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
                 StatusLabel.Text = "Key correct! Loading..."
                 CheckBtn.Text = "Success"
