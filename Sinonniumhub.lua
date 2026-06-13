@@ -1,6 +1,6 @@
 --by executing the script you agree that im not responsible for bans
 local GITHUB_WEB_URL = "https://github.com/Hack3rN3w/Scripts/tree/main/Sinonnium%20hub%20key"
-local GITHUB_KEY_URL = "https://raw.githubusercontent.com/Hack3rN3w/Scripts/main/Sinonnium%20hub%20key"
+local GITHUB_KEY_URL = "https://raw.githubusercontent.com/Hack3w/Scripts/main/SinonniumKey"
 
 task.wait(0.2)
 
