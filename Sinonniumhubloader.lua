@@ -5,26 +5,26 @@ local success, code = pcall(function()
 end)
 
 if success then
-    -- 1. Проверяем, не подсунул ли GitHub нам 404 ошибку вместо скрипта
+    -- 1. Check if GitHub returned a 404 error instead of the actual script
     if code:find("404: Not Found") then
-        warn("ОШИБКА 404: Файл 'Sinonniumhub.lua' не найден по этой ссылке!")
+        warn("ERROR 404: File 'Sinonniumhub.lua' was not found at this URL!")
     elseif #code > 0 then
         
-        -- 2. Безопасно компилируем код БЕЗ моментального вызова скобками ()
+        -- 2. Safely compile the code WITHOUT calling it instantly via ()
         local executableFunction, err = loadstring(code)
         
-        -- 3. Если loadstring вернул функцию (а не nil), то запускаем её
+        -- 3. If loadstring successfully returned a function, execute it
         if executableFunction then
             print("Script opened!")
             executableFunction() 
         else
-            -- Если внутри скачанного скрипта была синтаксическая ошибка
-            warn("Ошибка компиляции скрипта: " .. tostring(err))
+            -- Triggered if there is a syntax error inside the downloaded script
+            warn("Script compilation error: " .. tostring(err))
         end
         
     else
         warn("Script is empty!")
     end
 else
-    warn("Error executing. Try changing executor: " .. tostring(code))
+    warn("Execution error. Try changing your executor: " .. tostring(code))
 end
