@@ -1,5 +1,6 @@
 local starterGui = game:GetService("StarterGui")
 
+print("This is a joke, not real. The anticheat system is also not real. Just have fun!")
 starterGui:SetCore("SendNotification", {
     Title = "Loader",
     Text = "Downloading the scripthub....",
