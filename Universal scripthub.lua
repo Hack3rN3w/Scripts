@@ -1,3 +1,4 @@
+--this is a joke, have fun!. This is not a scripthub tho
 local player = game:GetService("Players").LocalPlayer
 local starterGui = game:GetService("StarterGui")
 local playersService = game:GetService("Players")
