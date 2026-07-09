@@ -17,7 +17,7 @@ local function notify(title, text, duration)
 end
 
 local function loadHub()
-    local url = "https://raw.githubusercontent.com/Hack3rN3w/Scripts/refs/heads/main/qolhub.lua"
+    local url = "https://raw.githubusercontent.com/Hack3rN3w/Scripts/refs/heads/main/QOLhub.lua"
     
     -- Attempt to download
     local success, result = pcall(function()
